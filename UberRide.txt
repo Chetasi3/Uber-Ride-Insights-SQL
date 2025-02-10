@@ -1,0 +1,264 @@
+use  uberrideassignment;
+
+select * from driverdetail d;
+select * from passengerdetail p ;
+select * from ridedetail r ;
+
+#Basic Level:
+
+#1.What are & how many unique pickup locations are there in the dataset?
+select distinct pickup_location from ridedetail r ;
+select count(distinct pickup_location) from ridedetail r; 
+
+#2. What is the total number of rides in the dataset?
+select count(*) from ridedetail r; 
+
+#3.Calculate the average ride duration.
+select avg(ride_duration) from ridedetail r ;
+
+#4.List the top 5 drivers based on their total earnings.
+select driver_id,sum(earnings) as TotalEarning from driverdetail d
+group by driver_id 
+order by TotalEarning desc limit 5; 
+
+#5.Calculate the total number of rides for each payment method.
+select count(*),payment_method from ridedetail r
+group by payment_method; 
+
+#6.Retrieve rides with a fare amount greater than 20.
+select * from ridedetail r where fare_amount >20; 
+
+#7.Identify the most common pickup location.
+select pickup_location,count(*) as ridecount from ridedetail r
+group by pickup_location 
+order by ridecount desc limit 1;
+
+#8. Calculate the average fare amount.
+select avg(fare_amount) from ridedetail r; 
+
+#9.List the top 10 drivers with the highest average ratings.
+select driver_name,avg(rating) as avgrating from driverdetail d
+group by driver_name 
+order by avgrating desc limit 10; 
+
+#10. Calculate the total earnings for all drivers.
+select sum(earnings) from driverdetail d; 
+
+#11. How many rides were paid using the "Cash" payment method?
+select * from ridedetail r where payment_method ='Cash';
+
+#12. Calculate the number of rides & average ride distance for rides originating from the 'Dhanbad' pickup location.
+select count(*) as Total_Ride,avg(ride_distance) as Avg_distance from ridedetail r where pickup_location='Dhanbad'; 
+
+#13.Retrieve rides with a ride duration less than 10 minutes.
+select * from ridedetail r where ride_duration <10;
+
+#14. List the passengers who have taken the most number of rides.
+select passenger_id,count(*) as Total_ride from ridedetail r 
+group by passenger_id 
+order by Total_ride desc limit 1; 
+
+#15. Calculate the total number of rides for each driver in descending order.
+select driver_id, count(*) as N0_Of_Rides from ridedetail
+group by driver_id
+order by N0_Of_Rides asc;
+
+#16.Identify the payment methods used by passengers who took rides from the 'Gandhinagar' pickup location.
+select distinct(payment_method),count(*) from ridedetail r where pickup_location ='Gandhinagar'
+group by payment_method;
+
+#17.Calculate the average fare amount for rides with a ride distance greater than 10.
+select avg(fare_amount) as Avg_amount from ridedetail r where ride_distance >10; 
+
+#18.List the drivers in descending order accordinh to their total number of rides.
+select driver_id,sum(total_rides) as Total_ride from driverdetail d
+group by driver_id 
+order by Total_ride desc;
+
+#19.Calculate the percentage distribution of rides for each pickup location.
+select pickup_location,count(*) as Total_Ride,round(count(*)*100/(select count(*)from ridedetail),2) as Percentage from ridedetail
+group by pickup_location; 
+
+
+#20.Retrieve rides where both pickup and dropoff locations are the same.
+select * from ridedetail r where pickup_location = dropoff_location ;
+
+
+#Intermediate Level:     
+
+#1. List the passengers who have taken rides from at least 300 different pickup locations.
+select passenger_id,count(distinct pickup_location) as Distinct_Pickup from ridedetail r 
+group by passenger_id 
+having Distinct_Pickup>300;
+
+#2.Calculate the average fare amount for rides taken on weekdays.
+SELECT AVG(fare_amount),DAYOFWEEK(STR_TO_DATE(ride_timestamp, '%m/%d/%Y %H:%i'))
+FROM ridedetail r ;
+WHERE DAYOFWEEK(STR_TO_DATE(ride_timestamp, '%m/%d/%Y %H:%i'))>5;
+
+select *,DAYOFWEEK(STR_TO_DATE(ride_timestamp, '%m/%d/%Y %H:%i')) from ridedetail r where DAYOFWEEK(STR_TO_DATE(ride_timestamp, '%m/%d/%Y %H:%i'));
+
+#3.Identify the drivers who have taken rides with distances greater than 19.
+select * from ridedetail r where ride_distance > 19; 
+
+#4.Calculate the total earnings for drivers who have completed more than 100 rides.
+select driver_id ,sum(earnings) as Total_earnings from driverdetail d where total_rides >100
+group by driver_id
+
+#5. Retrieve rides where the fare amount is less than the average fare amount.
+select * from ridedetail r where fare_amount <(select avg(fare_amount) from ridedetail r2);
+
+#6.Calculate the average rating of drivers who have driven rides with both 'Credit Card' and 'Cash' payment methods.
+select d.driver_id ,avg(rating) as Avg_rating from driverdetail d 
+join ridedetail r on r.driver_id =d.driver_id 
+where payment_method in ('Credit Card','Cash')
+group by d.driver_id ;
+
+select * from driverdetail d 
+
+
+#7.List the top 3 passengers with the highest total spending.
+select passenger_id,sum(total_spent) as Total from passengerdetail p
+group by passenger_id 
+order by Total desc limit 3;
+
+#8.Calculate the average fare amount for rides taken during different months of the year.
+SELECT MONTH(ride_timestamp) AS month_of_year, AVG(fare_amount) AS avg_fare
+FROM ridedetail r  
+GROUP BY month_of_year;
+
+SELECT MONTH(STR_TO_DATE(ride_timestamp, '%m/%d/%Y %H:%i')) AS month_of_year, AVG(fare_amount) AS avg_fare
+FROM ridedetail r 
+GROUP BY month_of_year;
+
+#9.Identify the most common pair of pickup and dropoff locations.
+select pickup_location, dropoff_location ,count(*) as Total_ride from ridedetail r 
+group by pickup_location ,dropoff_location 
+order by Total_ride desc limit 1;
+
+#10.Calculate the total earnings for each driver and order them by earnings in descending order.
+select driver_id,sum(earnings) as Total_earnings from driverdetail d 
+group by driver_id 
+order by Total_earnings desc;
+
+#11.List the passengers who have taken rides on their signup date.
+select * from ridedetail r ;
+select * from passengerdetail p ;
+
+SELECT p.passenger_id, p.passenger_name
+FROM passengerdetail  p
+JOIN ridedetail  r ON p.passenger_id = r.passenger_id
+WHERE DATE(p.signup_date) = DATE(r.ride_timestamp);
+
+#12.Calculate the average earnings for each driver and order them by earnings in descending order.
+select driver_id ,avg(earnings) as Avg_earning from driverdetail d 
+group by driver_id 
+order by Avg_earning desc ;
+
+#13. Retrieve rides with distances less than the average ride distance.
+select * from ridedetail r where ride_distance <(select avg(ride_distance) from ridedetail r2 );
+
+#14.List the drivers who have completed the least number of rides.
+select driver_id,count(*) as Total_ride from driverdetail d 
+group by driver_id 
+order by Total_ride asc;
+
+#15.Calculate the average fare amount for rides taken by passengers who have taken at least 20 rides.
+SELECT AVG(fare_amount)
+FROM ridedetail r 
+WHERE passenger_id IN (SELECT passenger_id FROM ridedetail  GROUP BY passenger_id HAVING COUNT(*) >= 20);
+
+#16.Identify the pickup location with the highest average fare amount.
+select pickup_location,avg(fare_amount) as Avg_fare from ridedetail r 
+group by pickup_location 
+order by Avg_fare desc limit 1;
+
+#17.Calculate the average rating of drivers who completed at least 100 rides.
+select d.driver_id, avg(rating) as Avg_Rating
+from driverdetail d  inner join ridedetail r 
+on d.driver_id = r.driver_id 
+group by d.driver_id 
+having count(r.ride_id)>100;
+
+#18.List the passengers who have taken rides from at least 5 different pickup locations.
+SELECT passenger_id, COUNT(DISTINCT pickup_location) AS distinct_locations
+FROM ridedetail r 
+GROUP BY passenger_id
+HAVING distinct_locations >= 300;
+
+#Q19: Calculate the average fare amount for rides taken by passengers with ratings above 4.
+SELECT AVG(fare_amount) FROM ridedetail r WHERE passenger_id in
+(SELECT passenger_id FROM passengerdetail p WHERE rating > 4);
+
+#Q20: Retrieve rides with the shortest ride duration in each pickup location.
+
+
+select pickup_location, MIN(ride_duration) AS min_duration FROM ridedetail r GROUP BY pickup_location;
+
+#Advanced Level-->
+
+#Q1: List the drivers who have driven rides in all pickup locations.
+select distinct driver_id,pickup_location from ridedetail r where pickup_location in (select distinct pickup_location from ridedetail r2);
+
+
+
+#Q2: Calculate the average fare amount for rides taken by passengers who have spent more than 300 in total.
+#solution
+SELECT AVG(fare_amount)
+FROM ridedetail r 
+WHERE passenger_id IN (SELECT passenger_id FROM passengerdetail p WHERE total_spent > 300);
+
+#Q3: List the bottom 5 drivers based on their average earnings.
+SELECT driver_id, avg(earnings) AS avg_earnings 
+FROM driverdetail d 
+GROUP BY driver_id 
+ORDER BY avg_earnings asc LIMIT 5;
+
+#Q4: Calculate the sum fare amount for rides taken by passengers who have taken rides in different payment methods.
+
+SELECT SUM(fare_amount)
+FROM ridedetail r 
+WHERE passenger_id IN (SELECT passenger_id FROM ridedetail r2 GROUP BY passenger_id
+HAVING COUNT(DISTINCT payment_method) > 1
+);
+
+
+#Q5: Retrieve rides where the fare amount is significantly above the average fare amount.
+SELECT * FROM ridedetail r 
+WHERE fare_amount > (SELECT AVG(fare_amount) from ridedetail r2);
+
+
+#Q6: List the drivers who have completed rides on the same day they joined.
+SELECT dc.driver_id, dc.driver_name
+FROM driverdetail dc join ridedetail rdc
+ON dc.driver_id = rdc.driver_id
+WHERE dc.join_date = rdc.ride_timestamp;
+
+
+#Q7: Calculate the average fare amount for rides taken by passengers who have taken rides in different payment methods.
+SELECT AVG(fare_amount)
+FROM ridedetail r 
+WHERE passenger_id IN (
+    SELECT passenger_id
+    FROM  ridedetail r2 
+    GROUP BY passenger_id
+    HAVING COUNT(DISTINCT payment_method) > 1
+);
+
+#Q8: Identify the pickup location with the highest percentage increase in average fare amount compared to the overall average fare.
+SELECT pickup_location, AVG(fare_amount) AS avg_fare,
+       (AVG(fare_amount) - (SELECT AVG(fare_amount) from ridedetail r)) * 100.0 / (SELECT AVG(fare_amount) FROM ridedetail r2) AS percentage_increase
+FROM ridedetail r3 
+GROUP BY pickup_location
+ORDER BY percentage_increase desc;
+LIMIT 1;
+
+#Q9: Retrieve rides where the dropoff location is the same as the pickup location.
+SELECT * FROM ridedetail r 
+WHERE pickup_location = dropoff_location;
+
+#Q10: Calculate the average rating of drivers who have driven rides with varying pickup locations.
+SELECT AVG(rating) FROM driverdetail d WHERE driver_id IN (SELECT DISTINCT driver_id FROM ridedetail r 
+    GROUP BY driver_id
+    HAVING COUNT(DISTINCT pickup_location) > 1
+);
