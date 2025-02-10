@@ -8,10 +8,13 @@ In our analysis of Uber's Rides insight, we delve into a dataset encompassing th
 * Lastly, the **'Passengers'** table encompasses passenger attributes, such as passenger ID, name, signup date, total rides taken, total spending, and passenger ratings.
 
 ## Key Insights
-* Analyze driver performance based on ride count, average ratings, and earnings. Identify top-performing drivers who complete the most rides and maintain high ratings.
+* Analyse driver performance based on ride count, average ratings, and earnings. Identify top-performing drivers who complete the most rides and maintain high ratings.
 * Examine passenger habits, including the number of rides taken and total spending. Identify high-value passengers who contribute significantly to platform revenue.
-* Calculate the total revenue generated from all completed rides. Break down the revenue based on specific periods or categories (e.g., by day, week, or driver).
-* Analyze driver and passenger ratings to evaluate service quality. Identify potential areas of improvement for drivers who consistently receive low ratings.
+* Calculate the total revenue generated from all completed rides.
+* Identified the most common pickup & drop-off locations.
+* Used joins to combine different tables to perform cross-sectional analyses.
+* Analyse driver and passenger ratings to evaluate service quality.
+* Identify potential areas of improvement for drivers who consistently receive low ratings.
 
 ## Technologies Used
 **SQL**: Queries for data extraction, aggregation, and analysis.
